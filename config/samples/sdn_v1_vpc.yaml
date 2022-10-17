@@ -1,0 +1,12 @@
+apiVersion: sdn.github.com/v1
+kind: Vpc
+metadata:
+  labels:
+    app.kubernetes.io/name: vpc
+    app.kubernetes.io/instance: vpc-sample
+    app.kubernetes.io/part-of: operator-learning
+    app.kuberentes.io/managed-by: kustomize
+    app.kubernetes.io/created-by: operator-learning
+  name: vpc-sample
+spec:
+  # TODO(user): Add fields here

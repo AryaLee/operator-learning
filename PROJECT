@@ -3,4 +3,14 @@ layout:
 - go.kubebuilder.io/v3
 projectName: operator-learning
 repo: AryaLee/operator-learning
+resources:
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: github.com
+  group: sdn
+  kind: Vpc
+  path: AryaLee/operator-learning/api/v1
+  version: v1
 version: "3"
