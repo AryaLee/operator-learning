@@ -34,6 +34,17 @@ func (r *Vpc) SetupWebhookWithManager(mgr ctrl.Manager) error {
 
 // TODO(user): EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
 
+//+kubebuilder:webhook:path=/mutate-sdn-github-com-v1-vpc,mutating=true,failurePolicy=fail,sideEffects=None,groups=sdn.github.com,resources=vpcs,verbs=create;update,versions=v1,name=mvpc.kb.io,admissionReviewVersions=v1
+
+var _ webhook.Defaulter = &Vpc{}
+
+// Default implements webhook.Defaulter so a webhook will be registered for the type
+func (r *Vpc) Default() {
+	vpclog.Info("default", "name", r.Name)
+
+	// TODO(user): fill in your defaulting logic.
+}
+
 // TODO(user): change verbs to "verbs=create;update;delete" if you want to enable deletion validation.
 //+kubebuilder:webhook:path=/validate-sdn-github-com-v1-vpc,mutating=false,failurePolicy=fail,sideEffects=None,groups=sdn.github.com,resources=vpcs,verbs=create;update,versions=v1,name=vvpc.kb.io,admissionReviewVersions=v1
 
@@ -43,6 +54,9 @@ var _ webhook.Validator = &Vpc{}
 func (r *Vpc) ValidateCreate() error {
 	vpclog.Info("validate create", "name", r.Name)
 
+	if r.Spec.VNI != 0 {
+		return errors.New("vni is forbidden for create")
+	}
 	// TODO(user): fill in your validation logic upon object creation.
 	return nil
 }
@@ -52,6 +66,10 @@ func (r *Vpc) ValidateUpdate(old runtime.Object) error {
 	vpclog.Info("validate update", "name", r.Name)
 
 	// TODO(user): fill in your validation logic upon object update.
+	oldVpc := old.(*Vpc)
+	if r.Spec.VNI == oldVpc.Spec.VNI {
+		return errors.New("vni is forbidden for update")
+	}
 	return nil
 }
 
