@@ -11,6 +11,33 @@ webhooks:
     service:
       name: webhook-service
       namespace: system
+      path: /mutate-sdn-github-com-v1-vpc
+  failurePolicy: Fail
+  name: mvpc.kb.io
+  rules:
+  - apiGroups:
+    - sdn.github.com
+    apiVersions:
+    - v1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - vpcs
+  sideEffects: None
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  creationTimestamp: null
+  name: validating-webhook-configuration
+webhooks:
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: webhook-service
+      namespace: system
       path: /validate-sdn-github-com-v1-vpc
   failurePolicy: Fail
   name: vvpc.kb.io

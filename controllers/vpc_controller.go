@@ -57,9 +57,6 @@ func (r *VpcReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.R
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
 	vpclog.Info("reconcile", "spec", vpc.Spec)
-
-	vpc.Spec.VNI = 100
-	r.Update(ctx, &vpc)
 	return ctrl.Result{}, nil
 }
 

@@ -17,6 +17,8 @@ limitations under the License.
 package v1
 
 import (
+	"errors"
+
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
@@ -57,7 +59,7 @@ func (r *Vpc) ValidateCreate() error {
 	if r.Spec.VNI != 0 {
 		return errors.New("vni is forbidden for create")
 	}
-	// TODO(user): fill in your validation logic upon object creation.
+	r.Spec.VNI = 100
 	return nil
 }
 
@@ -67,7 +69,7 @@ func (r *Vpc) ValidateUpdate(old runtime.Object) error {
 
 	// TODO(user): fill in your validation logic upon object update.
 	oldVpc := old.(*Vpc)
-	if r.Spec.VNI == oldVpc.Spec.VNI {
+	if r.Spec.VNI != oldVpc.Spec.VNI {
 		return errors.New("vni is forbidden for update")
 	}
 	return nil
