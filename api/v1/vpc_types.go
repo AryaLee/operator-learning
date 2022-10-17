@@ -28,8 +28,8 @@ type VpcSpec struct {
 	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 
-	Name string  `json:"name,omitempty"`
-	VNI int `json:"vni,omitempty"`
+	Name        string `json:"name,omitempty"`
+	VNI         int    `json:"vni,omitempty"`
 	Description string `json:"description,omitempty"`
 }
 
@@ -39,6 +39,7 @@ type VpcStatus struct {
 	// Important: Run "make" to regenerate code after modifying this file
 }
 
+//+k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 //+kubebuilder:object:root=true
 //+kubebuilder:subresource:status
 
@@ -51,6 +52,7 @@ type Vpc struct {
 	Status VpcStatus `json:"status,omitempty"`
 }
 
+//+k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 //+kubebuilder:object:root=true
 
 // VpcList contains a list of Vpc
