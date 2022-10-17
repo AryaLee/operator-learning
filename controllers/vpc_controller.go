@@ -50,7 +50,13 @@ func (r *VpcReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.R
 	_ = log.FromContext(ctx)
 
 	// TODO(user): your logic here
+	vpc := sdnv1.Vpc{}
+	if err := r.Get(ctx, req.NamespacedName, &vpc); err != nil {
+		return ctrl.Result{}, client.IgnoreNotFound(err)
+	}
 
+	vpc.Spec.VNI = 100
+	r.Update(ctx, vpc)
 	return ctrl.Result{}, nil
 }
 
