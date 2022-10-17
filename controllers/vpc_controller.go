@@ -27,6 +27,8 @@ import (
 	sdnv1 "AryaLee/operator-learning/api/v1"
 )
 
+var vpclog = log.Log.WithName("vpc-resource")
+
 // VpcReconciler reconciles a Vpc object
 type VpcReconciler struct {
 	client.Client
@@ -54,6 +56,7 @@ func (r *VpcReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.R
 	if err := r.Get(ctx, req.NamespacedName, &vpc); err != nil {
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
+	vpclog.Info("reconcile", "spec", vpc.Spec)
 
 	vpc.Spec.VNI = 100
 	r.Update(ctx, &vpc)

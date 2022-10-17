@@ -34,15 +34,6 @@ func (r *Vpc) SetupWebhookWithManager(mgr ctrl.Manager) error {
 
 // TODO(user): EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
 
-var _ webhook.Defaulter = &Vpc{}
-
-// Default implements webhook.Defaulter so a webhook will be registered for the type
-func (r *Vpc) Default() {
-	vpclog.Info("default", "name", r.Name)
-
-	// TODO(user): fill in your defaulting logic.
-}
-
 // TODO(user): change verbs to "verbs=create;update;delete" if you want to enable deletion validation.
 //+kubebuilder:webhook:path=/validate-sdn-github-com-v1-vpc,mutating=false,failurePolicy=fail,sideEffects=None,groups=sdn.github.com,resources=vpcs,verbs=create;update,versions=v1,name=vvpc.kb.io,admissionReviewVersions=v1
 
