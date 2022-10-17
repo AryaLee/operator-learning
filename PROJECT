@@ -1,0 +1,6 @@
+domain: github.com
+layout:
+- go.kubebuilder.io/v3
+projectName: operator-learning
+repo: AryaLee/operator-learning
+version: "3"
