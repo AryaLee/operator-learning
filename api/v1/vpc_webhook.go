@@ -34,8 +34,6 @@ func (r *Vpc) SetupWebhookWithManager(mgr ctrl.Manager) error {
 
 // TODO(user): EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
 
-//+kubebuilder:webhook:path=/mutate-sdn-github-com-v1-vpc,mutating=true,failurePolicy=fail,sideEffects=None,groups=sdn.github.com,resources=vpcs,verbs=create;update,versions=v1,name=mvpc.kb.io,admissionReviewVersions=v1
-
 var _ webhook.Defaulter = &Vpc{}
 
 // Default implements webhook.Defaulter so a webhook will be registered for the type
