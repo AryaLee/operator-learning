@@ -17,15 +17,10 @@ limitations under the License.
 package v1
 
 import (
-	"context"
-
-	admissionv1 "k8s.io/api/admission/v1"
-	"k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/webhook"
-	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
 )
 
 // log is for logging in this package.
@@ -33,34 +28,16 @@ var vpclog = logf.Log.WithName("vpc-resource")
 
 func (r *Vpc) SetupWebhookWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewWebhookManagedBy(mgr).
-		WithDefaulter(&Vpc{}).For(r).
+		For(r).
 		Complete()
 }
 
 // TODO(user): EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
 //+kubebuilder:webhook:path=/mutate-sdn-github-com-v1-vpc,mutating=true,failurePolicy=fail,sideEffects=None,groups=sdn.github.com,resources=vpcs,verbs=create;update,versions=v1,name=mvpc.kb.io,admissionReviewVersions=v1
 
-func (r *Vpc) Default(ctx context.Context, obj runtime.Object) error {
-	vpclog.Info("mutate", "default", obj)
-	req, err := admission.RequestFromContext(ctx)
-	if err != nil {
-		return err
-	}
+var _ webhook.Defaulter = &Vpc{}
 
-	vpclog.Info("mutate", "req", req)
-	vpclog.Info("mutate", "req.Operation", req.Operation)
-	vpc := obj.(*Vpc)
-	if req.Operation == admissionv1.Create {
-		vpclog.Info("mutate", "create", "status")
-		vpc.Status.VNI = 303
-		vpc.Spec.VNI = 505
-	}
-	if req.Operation == admissionv1.Update {
-		vpclog.Info("mutate", "update", "status")
-		vpc.Status.VNI = 404
-	}
-	vpclog.Info("mutate", "vpc obj", vpc)
-	return nil
+func (r *Vpc) Default() {
 }
 
 //+kubebuilder:webhook:path=/validate-sdn-github-com-v1-vpc,mutating=false,failurePolicy=fail,sideEffects=None,groups=sdn.github.com,resources=vpcs,verbs=create;update;delete,versions=v1,name=vvpc.kb.io,admissionReviewVersions=v1
@@ -71,9 +48,6 @@ var _ webhook.Validator = &Vpc{}
 func (r *Vpc) ValidateCreate() error {
 	vpclog.Info("validate create", "name", r.Name)
 
-	if r.VNI != 0 {
-		return errors.NewBadRequest("vni is forbidden to create.")
-	}
 	return nil
 }
 
@@ -81,10 +55,6 @@ func (r *Vpc) ValidateCreate() error {
 func (r *Vpc) ValidateUpdate(old runtime.Object) error {
 	vpclog.Info("validate update", "name", r.Name)
 
-	oldVpc := old.(*Vpc)
-	if oldVpc.VNI != 0 && oldVpc.VNI != r.VNI {
-		return errors.NewBadRequest("vni is forbidden to update.")
-	}
 	return nil
 }
 
