@@ -47,10 +47,14 @@ func (r *Vpc) Default(ctx context.Context, obj runtime.Object) error {
 		return err
 	}
 
+	vpclog.Info("mutate", "req", req)
+	vpclog.Info("mutate", "req.Operation", req.Operation)
 	vpc := obj.(*Vpc)
 	if req.Operation == admissionv1.Create {
+		vpclog.Info("mutate", "create", "status")
 		vpc.Status.VNI = 303
 	}
+	vpclog.Info("mutate", "vpc obj", vpc)
 	return nil
 }
 
