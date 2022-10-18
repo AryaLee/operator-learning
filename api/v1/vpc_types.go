@@ -34,7 +34,6 @@ type VpcSpec struct {
 }
 
 //+k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
-//+kubebuilder:object:root=true
 
 // VpcStatus defines the observed state of Vpc
 type VpcStatus struct {

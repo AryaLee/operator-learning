@@ -60,7 +60,7 @@ func (r *VpcReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.R
 	vpclog.Info("reconcile", "vpc", vpc)
 	if vpc.Status.VNI == 0 {
 		vpc.Status.VNI = 606
-		if err := r.Status().Update(ctx, &vpc.Status); err != nil {
+		if err := r.Status().Update(ctx, &vpc); err != nil {
 			return ctrl.Result{Requeue: true}, err
 		}
 	}
