@@ -14,3 +14,6 @@ spec:
   name: lmy-test
   description: "create test"
   vni: 10
+status:
+  vni: 30
+  # vni: 20
