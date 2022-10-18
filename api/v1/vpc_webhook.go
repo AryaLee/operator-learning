@@ -17,11 +17,15 @@ limitations under the License.
 package v1
 
 import (
+	"context"
+
+	admissionv1 "k8s.io/api/admission/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/webhook"
+	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
 )
 
 // log is for logging in this package.
@@ -29,25 +33,26 @@ var vpclog = logf.Log.WithName("vpc-resource")
 
 func (r *Vpc) SetupWebhookWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewWebhookManagedBy(mgr).
-		For(r).
+		WithDefaulter(&Vpc{}).For(r).
 		Complete()
 }
 
 // TODO(user): EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
-
 //+kubebuilder:webhook:path=/mutate-sdn-github-com-v1-vpc,mutating=true,failurePolicy=fail,sideEffects=None,groups=sdn.github.com,resources=vpcs,verbs=create;update,versions=v1,name=mvpc.kb.io,admissionReviewVersions=v1
 
-var _ webhook.Defaulter = &Vpc{}
+func (r *Vpc) Default(ctx context.Context, obj runtime.Object) error {
+	req, err := admission.RequestFromContext(ctx)
+	if err != nil {
+		return err
+	}
 
-// Default implements webhook.Defaulter so a webhook will be registered for the type
-func (r *Vpc) Default() {
-	vpclog.Info("default", "name", r.Name)
-
-	// TODO(user): fill in your defaulting logic.
+	if req.Operation == admissionv1.Create {
+		r.Status.VNI = 303
+	}
+	return nil
 }
 
-// TODO(user): change verbs to "verbs=create;update;delete" if you want to enable deletion validation.
-//+kubebuilder:webhook:path=/validate-sdn-github-com-v1-vpc,mutating=false,failurePolicy=fail,sideEffects=None,groups=sdn.github.com,resources=vpcs,verbs=create;update,versions=v1,name=vvpc.kb.io,admissionReviewVersions=v1
+//+kubebuilder:webhook:path=/validate-sdn-github-com-v1-vpc,mutating=false,failurePolicy=fail,sideEffects=None,groups=sdn.github.com,resources=vpcs,verbs=create;update;delete,versions=v1,name=vvpc.kb.io,admissionReviewVersions=v1
 
 var _ webhook.Validator = &Vpc{}
 

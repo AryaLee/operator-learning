@@ -56,10 +56,15 @@ func (r *VpcReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.R
 	if err := r.Get(ctx, req.NamespacedName, &vpc); err != nil {
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
+
 	vpclog.Info("reconcile", "vpc", vpc)
-	vpc.VNI = 100
-	if err := r.Update(ctx, &vpc); err != nil {
-		return ctrl.Result{Requeue: true}, err
+	if vpc.VNI == 0 {
+		vpc.VNI = 100
+		vpclog.Info("reconcile", "update vpc", vpc)
+
+		if err := r.Update(ctx, &vpc); err != nil {
+			return ctrl.Result{Requeue: true}, err
+		}
 	}
 
 	return ctrl.Result{}, nil
