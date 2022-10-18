@@ -53,6 +53,7 @@ func (r *Vpc) Default(ctx context.Context, obj runtime.Object) error {
 	if req.Operation == admissionv1.Create {
 		vpclog.Info("mutate", "create", "status")
 		vpc.Status.VNI = 303
+		vpc.Spec.VNI = 505
 	}
 	if req.Operation == admissionv1.Update {
 		vpclog.Info("mutate", "update", "status")
