@@ -30,7 +30,6 @@ type VpcSpec struct {
 
 	Name        string `json:"name,omitempty"`
 	Description string `json:"description,omitempty"`
-	VNI         int    `json:"vni,omitempty"`
 }
 
 //+k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
@@ -45,9 +44,19 @@ type VpcStatus struct {
 	VNI int `json:"vni,omitempty"`
 }
 
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
+type Subnet struct {
+	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
+	// Important: Run "make" to regenerate code after modifying this file
+	metav1.TypeMeta   `json:",inline"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+
+	Cidr string `json:"cidr,omitempty"`
+}
+
 //+k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 //+kubebuilder:object:root=true
-//+kubebuilder:subresource:status
+//+kubebuilder:subresource:status,subnet
 
 // Vpc is the Schema for the vpcs API
 type Vpc struct {
@@ -55,8 +64,8 @@ type Vpc struct {
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
 	Spec   VpcSpec   `json:"spec,omitempty"`
-	VNI    int       `json:"vni,omitempty"`
 	Status VpcStatus `json:"status,omitempty"`
+	Subnet Subnet    `json:"subnet,omitempty"`
 }
 
 //+k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
