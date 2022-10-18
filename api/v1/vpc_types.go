@@ -29,7 +29,6 @@ type VpcSpec struct {
 	// Important: Run "make" to regenerate code after modifying this file
 
 	Name        string `json:"name,omitempty"`
-	VNI         int    `json:"vni,omitempty"`
 	Description string `json:"description,omitempty"`
 }
 
@@ -49,6 +48,7 @@ type Vpc struct {
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
 	Spec   VpcSpec   `json:"spec,omitempty"`
+	VNI    int       `json:"vni,omitempty"`
 	Status VpcStatus `json:"status,omitempty"`
 }
 

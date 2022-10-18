@@ -17,8 +17,7 @@ limitations under the License.
 package v1
 
 import (
-	"errors"
-
+	"k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
@@ -56,10 +55,9 @@ var _ webhook.Validator = &Vpc{}
 func (r *Vpc) ValidateCreate() error {
 	vpclog.Info("validate create", "name", r.Name)
 
-	if r.Spec.VNI != 0 {
-		return errors.New("vni is forbidden for create")
+	if r.VNI != 0 {
+		return errors.NewBadRequest("vni is forbidden to create.")
 	}
-	r.Spec.VNI = 100
 	return nil
 }
 
@@ -67,10 +65,9 @@ func (r *Vpc) ValidateCreate() error {
 func (r *Vpc) ValidateUpdate(old runtime.Object) error {
 	vpclog.Info("validate update", "name", r.Name)
 
-	// TODO(user): fill in your validation logic upon object update.
 	oldVpc := old.(*Vpc)
-	if r.Spec.VNI != oldVpc.Spec.VNI {
-		return errors.New("vni is forbidden for update")
+	if oldVpc.VNI != 0 && oldVpc.VNI != r.VNI {
+		return errors.NewBadRequest("vni is forbidden to update.")
 	}
 	return nil
 }
