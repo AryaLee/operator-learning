@@ -33,9 +33,6 @@ type VpcSpec struct {
 	VNI         int    `json:"vni,omitempty"`
 }
 
-//+k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
-//+kubebuilder:object:root=true
-
 // VpcStatus defines the observed state of Vpc
 type VpcStatus struct {
 	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
@@ -48,7 +45,6 @@ type VpcStatus struct {
 
 //+k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 //+kubebuilder:object:root=true
-//+kubebuilder:subresource:status
 
 // Vpc is the Schema for the vpcs API
 type Vpc struct {
