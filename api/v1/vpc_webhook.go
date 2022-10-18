@@ -38,6 +38,13 @@ func (r *Vpc) SetupWebhookWithManager(mgr ctrl.Manager) error {
 var _ webhook.Defaulter = &Vpc{}
 
 func (r *Vpc) Default() {
+	if r.Status.VNI == 200 {
+		r.Status.VNI = 300
+	}
+
+	if r.Subnet.Cidr == "10.0.0.0/8" {
+		r.Subnet.Cidr = "10.0.0.1/8"
+	}
 }
 
 //+kubebuilder:webhook:path=/validate-sdn-github-com-v1-vpc,mutating=false,failurePolicy=fail,sideEffects=None,groups=sdn.github.com,resources=vpcs,verbs=create;update;delete,versions=v1,name=vvpc.kb.io,admissionReviewVersions=v1

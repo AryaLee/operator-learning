@@ -51,20 +51,15 @@ type VpcReconciler struct {
 func (r *VpcReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	_ = log.FromContext(ctx)
 
-	// TODO(user): your logic here
 	vpc := sdnv1.Vpc{}
 	if err := r.Get(ctx, req.NamespacedName, &vpc); err != nil {
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
 
-	vpclog.Info("reconcile", "vpc", vpc)
-	if vpc.Status.VNI == 0 {
-		vpc.Status.VNI = 606
-		if err := r.Status().Update(ctx, &vpc); err != nil {
-			return ctrl.Result{Requeue: true}, err
-		}
+	if vpc.Status.VNI == 400 {
+		r.Status().Update(ctx, &vpc.Status)
 	}
-
+	vpclog.Info("reconcile", "vpc", vpc)
 	return ctrl.Result{}, nil
 }
 
