@@ -41,13 +41,15 @@ func (r *Vpc) SetupWebhookWithManager(mgr ctrl.Manager) error {
 //+kubebuilder:webhook:path=/mutate-sdn-github-com-v1-vpc,mutating=true,failurePolicy=fail,sideEffects=None,groups=sdn.github.com,resources=vpcs,verbs=create;update,versions=v1,name=mvpc.kb.io,admissionReviewVersions=v1
 
 func (r *Vpc) Default(ctx context.Context, obj runtime.Object) error {
+	vpclog.Info("mutate", "default", obj)
 	req, err := admission.RequestFromContext(ctx)
 	if err != nil {
 		return err
 	}
 
+	vpc := obj.(*Vpc)
 	if req.Operation == admissionv1.Create {
-		r.Status.VNI = 303
+		vpc.Status.VNI = 303
 	}
 	return nil
 }
