@@ -57,7 +57,6 @@ type Subnet struct {
 //+k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 //+kubebuilder:object:root=true
 //+kubebuilder:subresource:status
-//+kubebuilder:subresource:subnet
 
 // Vpc is the Schema for the vpcs API
 type Vpc struct {
@@ -66,7 +65,6 @@ type Vpc struct {
 
 	Spec   VpcSpec   `json:"spec,omitempty"`
 	Status VpcStatus `json:"status,omitempty"`
-	Subnet Subnet    `json:"subnet,omitempty"`
 }
 
 //+k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

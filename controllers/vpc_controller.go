@@ -19,6 +19,7 @@ package controllers
 import (
 	"context"
 
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
@@ -57,6 +58,7 @@ func (r *VpcReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.R
 	}
 
 	if vpc.Status.VNI == 400 {
+		vpc.Status.CreationTimestamp = metav1.Now()
 		r.Status().Update(ctx, &vpc.Status)
 	}
 	vpclog.Info("reconcile", "vpc", vpc)
