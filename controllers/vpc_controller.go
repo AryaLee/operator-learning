@@ -65,7 +65,7 @@ func (r *VpcReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.R
 	vpclog.Info("reconcile", "vpc", vpc)
 
 	vpclog.Info("reconcile", "sleep", "begin")
-	time.Sleep(10 * time.Minute)
+	time.Sleep(30 * time.Second)
 	vpclog.Info("reconcile", "sleep", "done")
 	return ctrl.Result{}, nil
 }

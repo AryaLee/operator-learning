@@ -17,11 +17,13 @@ limitations under the License.
 package v1
 
 import (
+	"strings"
+	"time"
+
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/webhook"
-	"time"
 )
 
 // log is for logging in this package.
@@ -42,9 +44,11 @@ func (r *Vpc) Default() {
 	if r.Status.VNI == 200 {
 		r.Status.VNI = 300
 	}
-	vpclog.Info("mutating-webhook", "sleep", "begin")
-	time.Sleep(5 * time.Minute)
-	vpclog.Info("mutating-webhook", "sleep", "end")
+	if strings.HasPrefix(r.Name, "sleep") {
+		vpclog.Info("validate-create", "sleep", "begin")
+		time.Sleep(30 * time.Second)
+		vpclog.Info("validate-create", "sleep", "end")
+	}
 }
 
 //+kubebuilder:webhook:path=/validate-sdn-github-com-v1-vpc,mutating=false,failurePolicy=fail,sideEffects=None,groups=sdn.github.com,resources=vpcs,verbs=create;update;delete,versions=v1,name=vvpc.kb.io,admissionReviewVersions=v1
@@ -55,9 +59,11 @@ var _ webhook.Validator = &Vpc{}
 func (r *Vpc) ValidateCreate() error {
 	vpclog.Info("validate create", "name", r.Name)
 
-	vpclog.Info("validate-create", "sleep", "begin")
-	time.Sleep(5 * time.Minute)
-	vpclog.Info("validate-create", "sleep", "end")
+	if strings.HasPrefix(r.Name, "sleep") {
+		vpclog.Info("validate-create", "sleep", "begin")
+		time.Sleep(30 * time.Second)
+		vpclog.Info("validate-create", "sleep", "end")
+	}
 	return nil
 }
 
