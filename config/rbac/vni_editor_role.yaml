@@ -1,0 +1,31 @@
+# permissions for end users to edit vnis.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/name: clusterrole
+    app.kubernetes.io/instance: vni-editor-role
+    app.kubernetes.io/component: rbac
+    app.kubernetes.io/created-by: operator-learning
+    app.kubernetes.io/part-of: operator-learning
+    app.kubernetes.io/managed-by: kustomize
+  name: vni-editor-role
+rules:
+- apiGroups:
+  - sdn.github.com
+  resources:
+  - vnis
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - sdn.github.com
+  resources:
+  - vnis/status
+  verbs:
+  - get

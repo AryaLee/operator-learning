@@ -1,0 +1,12 @@
+apiVersion: sdn.github.com/v1
+kind: Vni
+metadata:
+  labels:
+    app.kubernetes.io/name: vni
+    app.kubernetes.io/instance: vni-sample
+    app.kubernetes.io/part-of: operator-learning
+    app.kuberentes.io/managed-by: kustomize
+    app.kubernetes.io/created-by: operator-learning
+  name: vni-sample
+spec:
+  # TODO(user): Add fields here
