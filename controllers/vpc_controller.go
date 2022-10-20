@@ -18,6 +18,7 @@ package controllers
 
 import (
 	"context"
+	"time"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -62,6 +63,10 @@ func (r *VpcReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.R
 		r.Status().Update(ctx, &vpc.Status)
 	}
 	vpclog.Info("reconcile", "vpc", vpc)
+
+	vpclog.Info("reconcile", "sleep", "begin")
+	time.Sleep(10 * time.Minute)
+	vpclog.Info("reconcile", "sleep", "done")
 	return ctrl.Result{}, nil
 }
 
