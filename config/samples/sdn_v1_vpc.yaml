@@ -7,13 +7,9 @@ metadata:
     app.kubernetes.io/part-of: operator-learning
     app.kuberentes.io/managed-by: kustomize
     app.kubernetes.io/created-by: operator-learning
-  name: vpc-sample1
+  name: vpc-sample2
   namespace: lmy
 spec:
   # TODO(user): Add fields here
-  name: lmy-test
-  description: "create test"
-  vni: 30
-status:
-  vni: 50
-  # vni: 20
+  name: lmy-test-sleep
+  description: "create sleep"
