@@ -17,8 +17,11 @@ limitations under the License.
 package v1
 
 import (
+	"context"
+
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
+	"sigs.k8s.io/controller-runtime/pkg/client"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/webhook"
 )
@@ -28,7 +31,9 @@ var subnetlog = logf.Log.WithName("subnet-resource")
 
 func (r *Subnet) SetupWebhookWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewWebhookManagedBy(mgr).
-		For(r).
+		For(r).WithValidator(&SubnetValidator{
+		Client: mgr.GetClient(),
+	}).
 		Complete()
 }
 
@@ -47,6 +52,34 @@ func (r *Subnet) Default() {
 
 // TODO(user): change verbs to "verbs=create;update;delete" if you want to enable deletion validation.
 //+kubebuilder:webhook:path=/validate-sdn-github-com-v1-subnet,mutating=false,failurePolicy=fail,sideEffects=None,groups=sdn.github.com,resources=subnets,verbs=create;update,versions=v1,name=vsubnet.kb.io,admissionReviewVersions=v1
+
+// +kubebuilder:object:generate=false
+type SubnetValidator struct {
+	client.Client
+}
+
+func (v *SubnetValidator) ValidateCreate(ctx context.Context, obj runtime.Object) error {
+	subnet := obj.(*Subnet)
+	var vpc Vpc
+	vpcKey := client.ObjectKey{
+		Namespace: subnet.Namespace,
+		Name:      subnet.Spec.VpcID,
+	}
+	if err := v.Get(ctx, vpcKey, &vpc); err != nil {
+		subnetlog.Error(err, "get vpc error")
+		return err
+	}
+	subnetlog.Info("validate create", "vpc", vpc)
+	return nil
+}
+
+func (v *SubnetValidator) ValidateUpdate(ctx context.Context, oldObj, newObj runtime.Object) error {
+	return nil
+}
+
+func (v *SubnetValidator) ValidateDelete(ctx context.Context, obj runtime.Object) error {
+	return nil
+}
 
 var _ webhook.Validator = &Subnet{}
 

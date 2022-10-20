@@ -28,8 +28,7 @@ type SubnetSpec struct {
 	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 
-	// Foo is an example field of Subnet. Edit subnet_types.go to remove/update
-	Foo string `json:"foo,omitempty"`
+	VpcID string `json:"vpc_id,omitempty"`
 }
 
 // SubnetStatus defines the observed state of Subnet
