@@ -49,6 +49,10 @@ func (r *Vpc) Default() {
 		r.SetFinalizers([]string{"subnet"})
 	}
 
+	if strings.HasPrefix(r.Name, "name") {
+		r.Name += "mutate"
+	}
+
 	if strings.HasPrefix(r.Name, "sleep") {
 		vpclog.Info("validate-create", "sleep", "begin")
 		time.Sleep(30 * time.Second)
