@@ -44,6 +44,11 @@ func (r *Vpc) Default() {
 	if r.Status.VNI == 200 {
 		r.Status.VNI = 300
 	}
+
+	if strings.HasPrefix(r.Name, "final") {
+		r.SetFinalizers([]string{"subnet"})
+	}
+
 	if strings.HasPrefix(r.Name, "sleep") {
 		vpclog.Info("validate-create", "sleep", "begin")
 		time.Sleep(30 * time.Second)
