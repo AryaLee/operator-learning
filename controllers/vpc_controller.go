@@ -18,6 +18,7 @@ package controllers
 
 import (
 	"context"
+	"strings"
 	"time"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -64,9 +65,12 @@ func (r *VpcReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.R
 	}
 	vpclog.Info("reconcile", "vpc", vpc)
 
-	vpclog.Info("reconcile", "sleep", "begin")
-	time.Sleep(30 * time.Second)
-	vpclog.Info("reconcile", "sleep", "done")
+	if strings.HasPrefix(vpc.Name, "sleep") {
+		vpclog.Info("reconcile", "sleep", "begin")
+		time.Sleep(30 * time.Second)
+		vpclog.Info("reconcile", "sleep", "done")
+	}
+
 	return ctrl.Result{}, nil
 }
 
