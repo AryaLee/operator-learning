@@ -18,6 +18,7 @@ package v1
 
 import (
 	"context"
+	"sync"
 
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
@@ -31,9 +32,8 @@ var subnetlog = logf.Log.WithName("subnet-resource")
 
 func (r *Subnet) SetupWebhookWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewWebhookManagedBy(mgr).
-		For(r).WithValidator(&SubnetValidator{
-		Client: mgr.GetClient(),
-	}).
+		For(r).
+		WithValidator(NewSubnetValidator(mgr.GetClient())).
 		Complete()
 }
 
@@ -56,6 +56,14 @@ func (r *Subnet) Default() {
 // +kubebuilder:object:generate=false
 type SubnetValidator struct {
 	client.Client
+	lock sync.Mutex
+}
+
+func NewSubnetValidator(cli client.Client) *SubnetValidator {
+	return &SubnetValidator{
+		Client: cli,
+		lock:   sync.Mutex{},
+	}
 }
 
 func (v *SubnetValidator) ValidateCreate(ctx context.Context, obj runtime.Object) error {
